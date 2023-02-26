@@ -10,7 +10,7 @@ services:
     depends_on:
       - backend
     volumes:
-      - ./caddyfile:/etc/caddy/Caddyfile
+      - ./Caddyfile:/etc/caddy/Caddyfile
       - ./.caddy/data:/data
       - ./.caddy/config:/config
     environment:
@@ -20,3 +20,6 @@ services:
       context: .
       dockerfile: ./Dockerfile
     restart: unless-stopped
+    volumes:
+      - ./access.log:/app/access.log
+      - ./config.json:/app/config.json

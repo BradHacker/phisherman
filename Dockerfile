@@ -7,6 +7,6 @@ WORKDIR /app
 ENV PATH="${PATH}:/app"
 
 RUN go mod download && go mod verify
-RUN go build -o phisherman_server server.go
+RUN go build -o phisherman_server main.go
 
 CMD ["./phisherman_server"]

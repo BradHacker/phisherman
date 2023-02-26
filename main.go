@@ -80,6 +80,9 @@ func main() {
 	r.GET(config.RoutePath, func(c *gin.Context) {
 		trackingId := c.DefaultQuery(config.IdQueryParam, "NOID")
 
+		remoteIps, _ := c.Request.Header["X-Forwarded-For"]
+		remoteIp := strings.Join(remoteIps, ",")
+
 		if reqUserAgent, exists := c.Request.Header["User-Agent"]; exists {
 			ua := useragent.Parse(strings.Join(reqUserAgent, " "))
 			accessLogger.WithFields(logrus.Fields{
@@ -93,7 +96,7 @@ func main() {
 				"OS Version":  ua.OSVersion,
 				"URL":         ua.URL,
 				"Version":     ua.Version,
-				"RemoteIP":    c.RemoteIP(),
+				"RemoteIP":    remoteIp,
 				"Tracking ID": trackingId,
 			}).Println("tracking page accessed")
 
@@ -146,7 +149,7 @@ func main() {
 						},
 						{
 							Name:  "RemoteIP",
-							Value: c.RemoteIP(),
+							Value: remoteIp,
 						},
 						{
 							Name:  "Tracking ID",
